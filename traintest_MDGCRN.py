@@ -159,11 +159,11 @@ def traintest_model():
 
 #########################################################################################    
 parser = argparse.ArgumentParser()
-parser.add_argument('--dataset', type=str, choices=['METRLA', 'PEMSBAY'], default='SHmetro_60min', help='which dataset to run')
+parser.add_argument('--dataset', type=str, default='SHMETRO', help='which dataset to run')
 parser.add_argument('--trainval_ratio', type=float, default=0.8, help='the ratio of training and validation data among the total')
 parser.add_argument('--val_ratio', type=float, default=0.125, help='the ratio of validation data among the trainval ratio')
 parser.add_argument('--num_nodes', type=int, default=288, help='num_nodes')
-parser.add_argument('--seq_len', type=int, default=6, help='input sequence length')
+parser.add_argument('--seq_len', type=int, default=12, help='input sequence length')
 parser.add_argument('--horizon', type=int, default=6, help='output sequence length')
 parser.add_argument('--input_dim', type=int, default=1, help='number of input channel')
 parser.add_argument('--output_dim', type=int, default=1, help='number of output channel')
@@ -173,7 +173,7 @@ parser.add_argument('--rnn_units', type=int, default=64, help='number of rnn uni
 parser.add_argument('--mem_num', type=int, default=20, help='number of meta-nodes/prototypes')
 parser.add_argument('--mem_dim', type=int, default=64, help='dimension of meta-nodes/prototypes')
 parser.add_argument("--loss", type=str, default='mask_mae_loss', help="mask_mae_loss")
-parser.add_argument('--lamb', type=float, default=1.05, help='lamb value for mae loss')
+parser.add_argument('--lamb', type=float, default=1.0, help='lamb value for mae loss')
 parser.add_argument('--lamb1', type=float, default=0.01, help='lamb value for separate loss')
 parser.add_argument('--lamb2', type=float, default=0.02, help='lamb value for compact loss')
 parser.add_argument("--epochs", type=int, default=350, help="number of epochs of training")
@@ -193,7 +193,7 @@ args = parser.parse_args()
         
    
 
-model_name = 'MegaCRN'
+model_name = 'MDGCRN'
 timestring = time.strftime('%Y%m%d%H%M%S', time.localtime())
 path = f'save_SH_60min/{args.dataset}_{model_name}_{timestring}'
 logging_path = f'{path}/{model_name}_{timestring}_logging.txt'
