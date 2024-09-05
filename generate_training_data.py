@@ -39,11 +39,8 @@ def generate_graph_seq2seq_io_data(
         time_ind = (index_value.astype('datetime64[ns]') - index_value.astype('datetime64[D]')) / np.timedelta64(1, "D")
         time_in_day = np.tile(time_ind, [1, num_nodes, 1]).transpose((2, 1, 0))#(34272, 207, 1)
         data_list1.append(time_in_day)
-        data_list2.append(time_in_day)#(34272, 207, 2)
-    # if add_day_in_week:
-    #     day_in_week = np.zeros(shape=(num_samples, num_nodes, 7))
-    #     day_in_week[np.arange(num_samples), :, df.index.dayofweek] = 1
-    #     data_list.append(day_in_week)
+        data_list2.append(time_in_day)
+
 
     data1 = np.concatenate(data_list1, axis=-1)
     data2 = np.concatenate(data_list2, axis=-1)
@@ -124,12 +121,7 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataset', type=str, default='SHMETRO', help='which dataset to run')
-    parser.add_argument("--output_dir", type=str, default="SHMETRO_30min/", help="Output directory.")
-    parser.add_argument("--traffic_df_filename", type=str, default="PEMSBAY/pems-bay.h5", help="Raw traffic readings.")
+    parser.add_argument("--output_dir", type=str, default="SHMETRO/", help="Output directory.")
+
     args = parser.parse_args()
-    # args.output_dir = f'{args.dataset}/'
-    # if args.dataset == 'METRLA':
-    #     args.traffic_df_filename = f'{args.dataset}/metr-la.h5'
-    # elif args.dataset == 'PEMSBAY':
-    #     args.traffic_df_filename = f'{args.dataset}/pems-bay.h5'
     main(args)

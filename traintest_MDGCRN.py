@@ -12,7 +12,7 @@ from torchsummary import summary
 import argparse
 import logging
 from model.utils import StandardScaler, DataLoader, masked_mae_loss, masked_mape_loss, masked_mse_loss, masked_rmse_loss
-from model.MegaCRN import MegaCRN
+from model.MDGCRN import MDGCRN
 
 def print_model(model):
     param_count = 0
@@ -25,7 +25,7 @@ def print_model(model):
     return
 
 def get_model():  
-    model = MegaCRN(num_nodes=args.num_nodes, input_dim=args.input_dim, output_dim=args.output_dim, horizon=args.horizon, 
+    model = MDGCRN(num_nodes=args.num_nodes, input_dim=args.input_dim, output_dim=args.output_dim, horizon=args.horizon, 
                     rnn_units=args.rnn_units, num_layers=args.num_rnn_layers, mem_num=args.mem_num, mem_dim=args.mem_dim, 
                     cheb_k = args.max_diffusion_step, cl_decay_steps=args.cl_decay_steps, use_curriculum_learning=args.use_curriculum_learning).to(device)
     return model
@@ -191,14 +191,7 @@ parser.add_argument('--gpu', type=int, default=0, help='which gpu to use')
 # parser.add_argument('--seed', type=int, default=100, help='random seed.')
 args = parser.parse_args()
         
-# if args.dataset == 'METRLA':
-#     data_path = f'../{args.dataset}/metr-la.h5'
-#     args.num_nodes = 207
-# elif args.dataset == 'PEMSBAY':
-#     data_path = f'../{args.dataset}/pems-bay.h5'
-#     args.num_nodes = 325
-# else:
-#     pass # including more datasets in the future    
+   
 
 model_name = 'MegaCRN'
 timestring = time.strftime('%Y%m%d%H%M%S', time.localtime())
@@ -265,10 +258,7 @@ os.environ ['VECLIB_MAXIMUM_THREADS'] = str(cpu_num)
 os.environ ['NUMEXPR_NUM_THREADS'] = str(cpu_num)
 torch.set_num_threads(cpu_num)
 device = torch.device("cuda:{}".format(args.gpu)) if torch.cuda.is_available() else torch.device("cpu")
-# Please comment the following three lines for running experiments multiple times.
-# np.random.seed(args.seed)
-# torch.manual_seed(args.seed)
-# if torch.cuda.is_available(): torch.cuda.manual_seed(args.seed)
+
 #####################################################################################################
 
 data = {}
